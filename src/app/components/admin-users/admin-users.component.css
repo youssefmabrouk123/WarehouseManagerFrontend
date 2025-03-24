@@ -1,0 +1,132 @@
+/* Animations */
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Styles généraux */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
+  }
+  
+  /* Tableau */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: none;
+  }
+  
+  thead tr {
+    background-color: #eff6ff;
+  }
+  
+  tbody tr {
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  tbody tr:hover {
+    background-color: #f9fafb;
+  }
+  
+  /* Boutons */
+  button {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Badges */
+  .bg-green-100 {
+    background-color: #d1fae5;
+  }
+  
+  .text-green-800 {
+    color: #065f46;
+  }
+  
+  .bg-red-100 {
+    background-color: #fee2e2;
+  }
+  
+  .text-red-800 {
+    color: #991b1b;
+  }
+  
+  /* Ombres et coins arrondis */
+  .rounded-2xl {
+    border-radius: 1.5rem;
+  }
+  
+  .shadow-xl {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .shadow-2xl {
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Champs de formulaire */
+  input, select {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  input:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  
+  /* Styles généraux */
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Tableau compact */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  /* Formulaire compact */
+  input, select {
+    font-size: 0.9rem;
+  }
+  
+  /* Boutons plus petits */
+  button:hover {
+    transform: translateY(-1px);
+  }

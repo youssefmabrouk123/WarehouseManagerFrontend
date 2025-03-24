@@ -1,0 +1,61 @@
+<div class="app-container flex min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar bg-white border-r border-gray-200 fixed left-0 top-0  z-50 h-screen transition-all duration-300 ease-in-out" [ngClass]="{'w-20': sidebarCollapsed, 'w-64': !sidebarCollapsed}">
+      <div class="sidebar-header flex items-center p-5 border-b border-gray-200 h-20">
+        <img *ngIf="!sidebarCollapsed" class="mx-auto h-9 w-auto" src="\assets\img\leoniii.png" alt="Logo" />
+      </div>
+      
+      <nav class="sidebar-nav p-4 flex-1 overflow-y-auto">
+        <ul class="pt-8">
+          <li *ngFor="let menu of menus" [ngClass]="{'bg-primary-50 border-l-4 border-primary-500': selectedMenu === menu.id}">
+            <a (click)="selectMenu(menu.id)" class="flex items-center p-3 text-gray-700 hover:text-primary-500 hover:bg-gray-100 transition-all duration-300 ease-in-out cursor-pointer">
+              <i class="fas text-lg" [ngClass]="menu.icon"></i>
+              <span *ngIf="!sidebarCollapsed" class="ml-3">{{ menu.label }}</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer p-4 border-t border-gray-200" *ngIf="!sidebarCollapsed">
+        <div class="user-info flex items-center mb-4">
+          <div class="user-details ml-3">
+            <!-- Afficher le nom et le rôle de l'utilisateur -->
+            <p class="user-name font-semibold">{{ user.fullName  }}</p>
+            <p class="user-role text-sm text-gray-500">{{ user.role }}</p>
+          </div>
+        </div>
+        <button class="logout-btn w-full flex items-center p-3 text-gray-700 hover:text-primary-500 hover:bg-gray-100 rounded-lg transition-all duration-300 ease-in-out" (click)="logout()">
+          <i class="fas fa-sign-out-alt mr-3"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+  
+    <!-- Main Content Area -->
+    <main class="main-content flex-1 ml-64 transition-all duration-300 ease-in-out" [ngClass]="{'ml-20': sidebarCollapsed}">
+      <!-- Top Navigation Bar -->
+      
+  
+      <!-- Page Content - Dashboard -->
+      <div class="content-container p-6" *ngIf="selectedMenu === 'dashboard'">
+        <app-scan-history-admin></app-scan-history-admin>
+
+  
+     
+      </div>
+  
+      <!-- Page Content - Other Sections -->
+      <div class="content-container p-6" *ngIf="selectedMenu === 'users'">
+        <app-admin-users></app-admin-users>
+      </div>
+      <div class="content-container p-6" *ngIf="selectedMenu === 'wagons'">
+        <app-test></app-test>
+      </div>
+      <div class="content-container p-6" *ngIf="selectedMenu === 'scan-history'">
+        <app-scan-history-admin></app-scan-history-admin>
+      </div>
+      <!-- <div class="content-container p-6" *ngIf="selectedMenu === 'scan-history'">
+        <app-scan-history></app-scan-history>
+      </div> -->
+    </main>
+  </div>

@@ -1,0 +1,60 @@
+/* src/app/components/login/login.component.css */
+/* Animation for fade-in effect */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Improve file input styling */
+  input[type="file"] {
+    font-size: 14px;
+  }
+  
+  /* Custom focus styles */
+  input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  }
+  
+  /* Better button hover effects */
+  button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .flex.space-x-4 {
+      flex-direction: column;
+      space-x: 0 !important;
+    }
+    
+    .flex.space-x-4 button {
+      margin-top: 0.75rem;
+      width: 100%;
+    }
+    
+    .flex.space-x-4 button:first-child {
+      margin-top: 0;
+    }
+  }
+  
+  /* Improve image preview */
+  img {
+    max-height: 300px;
+    object-fit: contain;
+  }
+  
+  /* Improve notifications */
+  [class*="bg-red-50"],
+  [class*="bg-green-50"] {
+    transition: all 0.3s ease;
+  }

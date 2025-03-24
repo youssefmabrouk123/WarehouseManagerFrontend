@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-dashboard-admin',
+  templateUrl: './dashboard-admin.component.html',
+  styleUrls: ['./dashboard-admin.component.css']
 })
-export class AppComponent {
+export class DashboardAdminComponent implements OnInit {
   sidebarCollapsed: boolean = false;
   selectedMenu: string = 'dashboard';
+  user = localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails') as string) : { name: 'Utilisateur inconnu', role: 'Rôle non défini' };
 
   menus = [
-    { id: 'dashboard', label: 'Dashboard', icon: 'fa-tachometer-alt' },
-    { id: 'inventory', label: 'Inventory', icon: 'fa-boxes' },
-    { id: 'orders', label: 'Orders', icon: 'fa-clipboard-list' },
-    { id: 'suppliers', label: 'Suppliers', icon: 'fa-truck' },
-    { id: 'reports', label: 'Reports', icon: 'fa-chart-bar' },
+    // { id: 'dashboard', label: 'Dashboard', icon: 'fa-tachometer-alt' },
+    { id: 'users', label: 'Users', icon: 'fa-solid fa-people-group' },
+    { id: 'wagons', label: 'Wagons', icon: 'fa-boxes' },
+    // { id: 'scan', label: 'Scan', icon: 'fa-clipboard-list' },
+    { id: 'scan-history', label: 'Scan-history', icon: 'fa-truck' },
+    // { id: 'reports', label: 'Reports', icon: 'fa-chart-bar' },
     { id: 'settings', label: 'Settings', icon: 'fa-cog' }
   ];
 
@@ -32,6 +35,20 @@ export class AppComponent {
     { title: 'New Order Placed', description: 'Customer ABC Corp placed order #48290', time: 'Yesterday', icon: 'fa-plus', iconBgColor: 'bg-purple-500' }
   ];
 
+  constructor(private router: Router) {} // Injection de Router
+
+  ngOnInit(): void {
+    // Récupérer les données de l'utilisateur depuis le localStorage
+    const userDetails = localStorage.getItem('userDetails');
+    if (userDetails) {
+      this.user = JSON.parse(userDetails);
+      // Si l'API renvoie des champs comme "name" et "role", on les utilise
+      // Sinon, ajuste selon la structure réelle de l'API (par exemple, "userName" au lieu de "name")
+      this.user.name = this.user.name || this.user.userName || 'Utilisateur inconnu';
+      this.user.role = this.user.role || 'Rôle non défini';
+    }
+  }
+
   toggleSidebar(): void {
     this.sidebarCollapsed = !this.sidebarCollapsed;
   }
@@ -41,5 +58,14 @@ export class AppComponent {
     if (this.sidebarCollapsed) {
       this.sidebarCollapsed = false;
     }
+  }
+
+  logout(): void {
+    // Vider le localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('userDetails');
+    // Rediriger vers la page de connexion
+    this.router.navigate(['/signin']);
   }
 }

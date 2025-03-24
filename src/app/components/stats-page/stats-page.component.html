@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-gray-100 p-6">
+    <!-- En-tête -->
+    <header class="mb-8">
+      <h1 class="text-4xl font-extrabold text-gray-900">Tableau de Bord des Statistiques</h1>
+      <p class="text-gray-600 mt-2">Analyse détaillée des Cabas</p>
+    </header>
+  
+    <!-- Chargement -->
+    <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-50 z-50">
+      <svg class="animate-spin h-10 w-10 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+      </svg>
+    </div>
+  
+    <!-- Erreur -->
+    <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-600 p-4 mb-6 rounded-lg shadow">
+      <p class="text-red-800 font-semibold">{{ errorMessage }}</p>
+    </div>
+  
+    <!-- Contenu -->
+    <div *ngIf="stats" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Carte des Statistiques -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Résumé des Cabas</h2>
+        <div class="space-y-3">
+          <p class="text-gray-600"><span class="font-medium">Total :</span> {{ stats.totalCabas }}</p>
+          <p class="text-gray-600"><span class="font-medium text-red-500">Vides :</span> {{ stats.emptyCabas }}</p>
+          <p class="text-gray-600"><span class="font-medium text-blue-500">En cours :</span> {{ stats.inProgressCabas }}</p>
+          <p class="text-gray-600"><span class="font-medium text-green-500">Remplis :</span> {{ stats.filledCabas }}</p>
+        </div>
+      </div>
+  
+      <!-- Graphique Camembert -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <canvas #pieChart></canvas>
+      </div>
+  
+      <!-- Graphique en Barres -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <canvas #barChart></canvas>
+      </div>
+  
+      <!-- Graphique Donut -->
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <canvas #donutChart></canvas>
+      </div>
+    </div>
+  </div>

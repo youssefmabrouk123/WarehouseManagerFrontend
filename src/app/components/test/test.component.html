@@ -1,0 +1,187 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100  flex flex-col">
+    <!-- Header -->
+    <header class="mb-8 flex items-center justify-between">
+      <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">Tableau de bord des Wagons</h1>
+      <div class="flex space-x-4">
+        <!-- <button (click)="openScanPopup()" 
+                class="px-4 py-2 bg-green-600 text-white rounded-full shadow-md hover:bg-green-700 transition-all duration-200 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Scanner
+        </button> -->
+        <button (click)="loadWagons()" 
+                class="px-4 py-2 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all duration-200 flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          Rafraîchir
+        </button>
+      </div>
+    </header>
+  
+    <!-- Loading Overlay -->
+    <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-40 z-50">
+      <div class="bg-white p-6 rounded-lg shadow-xl flex items-center space-x-4">
+        <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-gray-700 font-medium">Chargement...</span>
+      </div>
+    </div>
+  
+    <!-- Popup de Scan -->
+    <div *ngIf="showScanPopup" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+      <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md"
+           [@popupAnimation]="showScanPopup ? 'visible' : 'hidden'">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Scanner un Caba</h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Code-barres</label>
+            <input [(ngModel)]="scanRequest.barcode" type="text" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                   placeholder="Entrez le code-barres" (keyup.enter)="scanBarcode()">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Utilisateur</label>
+            <input [(ngModel)]="username" type="text" 
+                   class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                   placeholder="Nom d'utilisateur">
+          </div>
+        
+        </div>
+        <div class="mt-6 flex justify-end space-x-4">
+          <button (click)="closeScanPopup()" 
+                  class="px-4 py-2 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 transition-all duration-200">
+            Annuler
+          </button>
+          <button (click)="scanBarcode()" 
+                  class="px-4 py-2 bg-blue-600 text-white rounded-full shadow-md hover:bg-blue-700 transition-all duration-200">
+            Scanner
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-3 flex-1">
+      <!-- Wagon List -->
+      <aside class="lg:col-span-1 bg-white rounded-xl shadow-lg p-4 w-full">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Wagons</h2>
+        <input [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange($event)" 
+               type="text" placeholder="Rechercher par ID de wagon..." 
+               class="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
+        <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div *ngFor="let wagon of filteredWagons" 
+               (click)="loadWagonDetails(wagon.wagonId)"
+               class="cursor-pointer p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-sm hover:shadow-md">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-medium text-gray-900 text-lg">{{ wagon.wagonId }}</span>
+              <span class="text-sm font-medium text-blue-600">{{ wagon.fillRate | number:'1.0-0' }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5">
+              <div [style.width]="wagon.fillRate + '%'" 
+                   class="bg-blue-600 h-2.5 rounded-full transition-all duration-300"></div>
+            </div>
+            <!-- <p class="text-sm text-gray-600 mt-2" *ngIf="selectedWagon">Cabas: {{  selectedWagon.totalCabas  }}</p> -->
+          </div>
+        </div>
+      </aside>
+  
+      <!-- Wagon Details -->
+      <main class="lg:col-span-3" *ngIf="selectedWagon">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">{{ selectedWagon.wagonId }}</h2>
+            <div class="text-sm text-gray-600">
+              <span>Total: {{ selectedWagon.totalCabas }}</span> • 
+              <span class="text-green-600">Remplis: {{ selectedWagon.filledCabas }}</span> • 
+              <span class="text-yellow-600">En cours: {{ selectedWagon.inProgressCabas }}</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <p class="text-sm font-medium text-gray-700">Production</p>
+              <p class="text-lg text-gray-900">{{ selectedWagon.warehouseProduction }}</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <p class="text-sm font-medium text-gray-700">Site</p>
+              <p class="text-lg text-gray-900">{{ selectedWagon.localSiteNumber }}</p>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <p class="text-sm font-medium text-gray-700">Zone</p>
+              <p class="text-lg text-gray-900">{{ selectedWagon.sourceArea }}</p>
+            </div>
+          </div>
+          <div class="overflow-x-auto rounded-lg border border-gray-200">
+            <table class="w-full text-sm text-left text-gray-600">
+              <thead class="text-xs uppercase bg-gray-50 text-gray-700">
+                <tr>
+                  <th class="px-6 py-3">Code-barres</th>
+                  <th class="px-6 py-3">État</th>
+                  <th class="px-6 py-3">Dernier scan</th>
+                  <th class="px-6 py-3">Scanné par</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let caba of selectedWagon.cabas" 
+                    class="border-b hover:bg-gray-50 transition-colors duration-150">
+                  <td class="px-6 py-4 font-medium text-gray-900">{{ caba.barcode }}</td>
+                  <td class="px-6 py-4">
+                    <span [ngClass]="{
+                      'bg-green-100 text-green-800': caba.status === 'FILLED',
+                      'bg-yellow-100 text-yellow-800': caba.status === 'IN_PROGRESS',
+                      'bg-gray-100 text-gray-800': caba.status === 'EMPTY'
+                    }" class="px-3 py-1 rounded-full text-xs font-semibold">
+                      {{ caba.status }}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">{{ caba.lastScanTime | date:'medium' }}</td>
+                  <td class="px-6 py-4">{{ caba.lastScannedBy }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  
+    <!-- Error Toast -->
+    <div *ngIf="errorMessage" class="fixed bottom-6 right-6 max-w-sm w-full z-50"
+         [@toastAnimation]="errorMessage ? 'visible' : 'hidden'">
+      <div class="bg-red-50 shadow-2xl rounded-xl border-l-4 border-red-600 p-5 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-xl">
+        <svg class="w-7 h-7 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <div class="flex-1">
+          <p class="text-sm font-semibold text-red-900">{{ errorMessage }}</p>
+          <p class="text-xs text-red-700 mt-1">Veuillez réessayer ou contacter le support</p>
+        </div>
+        <button (click)="errorMessage = ''" 
+                class="text-red-500 hover:text-red-700 transition-colors duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Success Toast -->
+    <div *ngIf="successMessage" class="fixed bottom-6 right-6 max-w-sm w-full z-50"
+         [@toastAnimation]="successMessage ? 'visible' : 'hidden'">
+      <div class="bg-green-50 shadow-2xl rounded-xl border-l-4 border-green-600 p-5 flex items-center space-x-4 transform transition-all duration-300 hover:shadow-xl">
+        <svg class="w-7 h-7 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <div class="flex-1">
+          <p class="text-sm font-semibold text-green-900">{{ successMessage }}</p>
+        </div>
+        <button (click)="successMessage = ''" 
+                class="text-green-500 hover:text-green-700 transition-colors duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>

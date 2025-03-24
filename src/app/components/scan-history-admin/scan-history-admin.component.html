@@ -1,0 +1,139 @@
+<div class="min-h-screen flex">
+    <!-- Contenu principal (light mode) -->
+    <main class="flex-1 p-8 transition-all duration-500 ease-in-out bg-gradient-to-br from-gray-50 to-gray-100" [ngClass]="{'mr-72': isFilterSidebarOpen, 'mr-16': !isFilterSidebarOpen}">
+      <!-- En-tête -->
+      <div class="flex items-center justify-between mb-10">
+        <h1 class="text-4xl font-bold text-gray-800 tracking-tight flex items-center">
+          <i class="fas fa-history mr-3 text-blue-600 animate-spin-slow"></i> Historique des scans
+        </h1>
+        <button (click)="exportToCsv()" class="flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full hover:from-green-600 hover:to-green-700 transition-all duration-300 shadow-lg animate-pulse">
+          <i class="fas fa-download mr-2 animate-bounce"></i> Exporter en CSV
+        </button>
+      </div>
+  
+      <!-- Liste des scans sous forme de cartes -->
+      <div class="space-y-6">
+        <div *ngFor="let scan of filteredScans; let i = index" class="relative bg-white rounded-xl p-6 shadow-lg transform transition-all duration-500 ease-in-out animate-card hover:shadow-neon border border-gray-200 hover:border-blue-500">
+          <!-- Icône décorative -->
+          <div class="absolute top-4 right-4 text-blue-600 hover:text-blue-500 transition-all duration-300 transform hover:rotate-12">
+            <i class="fas fa-barcode text-2xl"></i>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-id-badge mr-2 text-blue-600"></i> ID
+              </p>
+              <p class="text-lg font-semibold text-blue-600">{{ scan.id }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-barcode mr-2 text-magenta-600"></i> Barcode
+              </p>
+              <p class="text-lg font-semibold text-magenta-600">{{ scan.barcode }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-boxes mr-2 text-purple-600"></i> Wagon ID
+              </p>
+              <p class="text-lg font-semibold text-purple-600">{{ scan.wagonId }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-arrow-circle-left mr-2 text-yellow-600"></i> Statut avant
+              </p>
+              <p class="text-lg font-semibold text-yellow-600">{{ scan.statusBefore }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-arrow-circle-right mr-2 text-green-600"></i> Statut après
+              </p>
+              <p class="text-lg font-semibold text-green-600">{{ scan.statusAfter }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-clock mr-2 text-gray-500"></i> Date du scan
+              </p>
+              <p class="text-lg font-semibold text-gray-700">{{ scan.scanTime | date:'medium' }}</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-user mr-2 text-blue-600"></i> User ID
+              </p>
+              <p class="text-lg font-semibold text-blue-600">{{ scan.userId }}</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600 flex items-center">
+                <i class="fas fa-user-circle mr-2 text-magenta-600"></i> Utilisateur
+              </p>
+              <p class="text-lg font-semibold text-magenta-600">{{ scan.username }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Pagination -->
+      <!-- <div class="flex justify-center items-center mt-10 space-x-4">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1" class="px-5 py-2 bg-gray-200 text-blue-600 rounded-full hover:bg-gray-300 hover:text-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="flex space-x-2">
+          <button *ngFor="let page of getPages()" (click)="changePage(page)" class="px-4 py-2 rounded-full transition-all duration-300" [ngClass]="{'bg-blue-600 text-white': page === currentPage, 'bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-blue-500': page !== currentPage}">
+            {{ page }}
+          </button>
+        </div>
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages" class="px-5 py-2 bg-gray-200 text-blue-600 rounded-full hover:bg-gray-300 hover:text-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div> -->
+    </main>
+  
+    <!-- Barre latérale de filtres (night mode, déplacée à droite) -->
+    <aside class="bg-gray-800 border-l border-gray-700 fixed top-0 right-0 h-full transition-all duration-500 ease-in-out z-40" [ngClass]="{'w-72': isFilterSidebarOpen, 'w-16': !isFilterSidebarOpen}">
+      <!-- Bouton pour basculer la barre latérale -->
+      <button (click)="toggleFilterSidebar()" class="absolute top-4 left-4 text-blue-400 hover:text-blue-300 transition-all duration-300 transform hover:scale-110">
+        <i class="fas fa-filter text-2xl mr-3" *ngIf="!isFilterSidebarOpen"></i>
+        <i class="fas fa-times text-2xl" *ngIf="isFilterSidebarOpen"></i>
+      </button>
+  
+      <!-- Contenu de la barre latérale -->
+      <div class="p-6 overflow-y-auto h-full" *ngIf="isFilterSidebarOpen">
+        <h2 class="text-2xl font-bold text-blue-400 mb-6 ml-20 flex items-center">
+          <i class="fas fa-filter mr-2 text-blue-500"></i> Filtres
+        </h2>
+        <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="space-y-5">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Wagon ID</label>
+            <input formControlName="wagonId" type="text" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400 hover:bg-gray-600" placeholder="Entrez l'ID du wagon" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Barcode</label>
+            <input formControlName="barcode" type="text" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400 hover:bg-gray-600" placeholder="Entrez le barcode" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Date de début</label>
+            <input formControlName="startDate" type="datetime-local" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:bg-gray-600" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">Date de fin</label>
+            <input formControlName="endDate" type="datetime-local" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:bg-gray-600" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-1">User ID</label>
+            <input formControlName="userId" type="number" class="w-full p-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400 hover:bg-gray-600" placeholder="Entrez l'ID de l'utilisateur" />
+          </div>
+          <div class="flex space-x-3">
+            <button type="button" (click)="resetFilters()" class="flex-1 p-3 bg-gray-600 text-gray-300 rounded-lg hover:bg-gray-500 transition-all duration-300 flex items-center justify-center transform hover:scale-105">
+              <i class="fas fa-undo mr-2"></i> Réinitialiser
+            </button>
+            <button type="submit" class="flex-1 p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all duration-300 flex items-center justify-center transform hover:scale-105 animate-pulse">
+              <i class="fas fa-filter mr-2"></i> Appliquer
+            </button>
+          </div>
+        </form>
+      </div>
+    </aside>
+  </div>
