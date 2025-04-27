@@ -14,7 +14,7 @@ export class ScanComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('barcodeInput') barcodeInput!: ElementRef;
   
   barcode = '';
-  username = JSON.parse(localStorage.getItem('userDetails') || '{}').fullName || '**********';
+  username = JSON.parse(localStorage.getItem('userDetails') || '{}').username || '**********';
   location = '';
   errorMessage = '';
   successMessage = '';
