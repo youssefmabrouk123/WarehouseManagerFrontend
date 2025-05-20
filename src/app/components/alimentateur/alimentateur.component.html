@@ -38,19 +38,13 @@
 
     <!-- Page Content - Dashboard -->
     <div class="content-container p-6" *ngIf="selectedMenu === 'dashboard'">
-      <app-test></app-test>
+     
 
     </div>
 
     <!-- Page Content - Other Sections -->
     <div class="content-container p-6" *ngIf="selectedMenu === 'wagons'">
-      <app-test></app-test>
-    </div>
-    <div class="content-container p-6" *ngIf="selectedMenu === 'scan'">
-      <app-scan></app-scan>
-    </div>
-    <div class="content-container p-6" *ngIf="selectedMenu === 'scan-history'">
-      <app-scan-history></app-scan-history>
+        <app-wagon-dashboard></app-wagon-dashboard>
     </div>
     <div class="content-container p-6" *ngIf="selectedMenu === 'reports'">
       <app-problem-submission></app-problem-submission>

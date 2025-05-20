@@ -4,6 +4,7 @@ import { SigninComponent } from './components/signin/signin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
 import { AuthGuard } from './guards/auth.guard';
+import { AlimentateurComponent } from './components/alimentateur/alimentateur.component';
 
 const routes: Routes = [
   { path: 'signin', component: SigninComponent },
@@ -11,7 +12,13 @@ const routes: Routes = [
     path: 'dashboard', 
     component: DashboardComponent,
     canActivate: [AuthGuard],
-    data: { role: 'USER' } // Only users with role 'USER' can access this route
+    data: { role: 'AGENT' } // Only users with role 'USER' can access this route
+  },
+  { 
+    path: 'alimentateur', 
+    component: AlimentateurComponent,
+    canActivate: [AuthGuard],
+    data: { role: 'ALIMENTATEUR' } // Only users with role 'USER' can access this route
   },
   { 
     path: 'admin', 

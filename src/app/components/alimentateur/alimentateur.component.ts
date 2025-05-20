@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'; // Ajout de Router pour la déconnexion
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-alimentateur',
+  templateUrl: './alimentateur.component.html',
+  styleUrls: ['./alimentateur.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class AlimentateurComponent implements OnInit {
   sidebarCollapsed: boolean = false;
-  selectedMenu: string = 'dashboard';
+  selectedMenu: string = 'wagons';
   user = localStorage.getItem('userDetails') ? JSON.parse(localStorage.getItem('userDetails') as string) : { name: 'Utilisateur inconnu', role: 'Rôle non défini' };
    menus = [
     // { id: 'dashboard', label: 'Dashboard', icon: 'fa-tachometer-alt' },
     { id: 'wagons', label: 'Wagons', icon: 'fa-boxes' },
-    { id: 'scan', label: 'Scan', icon: 'fa-clipboard-list' },
-    { id: 'scan-history', label: 'Scan-history', icon: 'fa-truck' },
     { id: 'reports', label: 'Reports', icon: 'fa-chart-bar' },
     // { id: 'settings', label: 'Settings', icon: 'fa-cog' }
   ];

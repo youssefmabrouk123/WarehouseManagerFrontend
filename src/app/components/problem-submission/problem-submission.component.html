@@ -1,0 +1,121 @@
+<div class="min-h-screen p-4">
+  <!-- Header -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-extrabold text-gray-900">Signalement de Problème</h1>
+    <p class="text-gray-600 mt-2">Remplissez le formulaire ci-dessous pour signaler un problème.</p>
+  </header>
+
+  <!-- Notification Messages -->
+  <div *ngIf="errorMessage" class="bg-red-50 border-l-4 border-red-600 p-4 mb-6 rounded-lg shadow animate-fade-in">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-red-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <p class="text-red-800 font-semibold">{{ errorMessage }}</p>
+    </div>
+    <button (click)="errorMessage = ''" class="mt-2 text-red-600 hover:text-red-800 text-sm">Fermer</button>
+  </div>
+
+  <div *ngIf="successMessage" class="bg-green-50 border-l-4 border-green-600 p-4 mb-6 rounded-lg shadow animate-fade-in">
+    <div class="flex items-center">
+      <svg class="h-6 w-6 text-green-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      <p class="text-green-800 font-semibold">{{ successMessage }}</p>
+    </div>
+    <button (click)="successMessage = ''" class="mt-2 text-green-600 hover:text-green-800 text-sm">Fermer</button>
+  </div>
+
+  <!-- Main Form -->
+  <div class="bg-white p-6 rounded-xl shadow-lg max-w-md mx-auto">
+    <form #problemForm="ngForm" (ngSubmit)="submitProblem()">
+      <!-- Title Field -->
+      <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-medium mb-2">Signature / Problème</label>
+        <div class="relative">
+          <input
+            type="text"
+            id="title"
+            name="title"
+            ngModel
+            required
+            class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            placeholder="Entrez le titre du problème"
+          />
+          <svg class="absolute left-3 top-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- User ID Field -->
+      <div class="mb-4">
+        <label for="userId" class="block text-gray-700 font-medium mb-2">ID de l'utilisateur</label>
+        <div class="relative">
+          <input
+            type="text"
+            id="userId"
+            name="userId"
+            [(ngModel)]="userId"
+            required
+            readonly
+            class="w-full p-3 pl-10 border border-gray-300 rounded-lg bg-gray-50"
+          />
+          <svg class="absolute left-3 top-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Problem Type Field -->
+      <div class="mb-4">
+        <label for="problemType" class="block text-gray-700 font-medium mb-2">Type de problème</label>
+        <div class="relative">
+          <select
+            id="problemType"
+            name="problemType"
+            ngModel
+            required
+            class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          >
+            <option value="" disabled selected>Choisissez un type de problème</option>
+            <option value="material_shortage">Manque matériel</option>
+            <option value="technical_failure">Panne technique</option>
+            <option value="radio_issue">Problème de code a bare</option>
+            <option value="it_failure">Panne IT</option>
+          </select>
+          <svg class="absolute left-3 top-3 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2-2 4-2 4m-8-4c0-1.1.9-2 2-2s2 .9 2 2-2 4-2 4m4-8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Description Field -->
+      <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-medium mb-2">Description du problème</label>
+        <div class="relative">
+          <textarea
+            id="description"
+            name="description"
+            ngModel
+            required
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            rows="4"
+            placeholder="Décrivez le problème en détail"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="text-end">
+        <button
+          type="submit"
+          [disabled]="!problemForm.valid"
+          class="px-4 py-3 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+          Soumettre
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

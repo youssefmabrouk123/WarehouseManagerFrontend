@@ -19,6 +19,9 @@ import { ScanHistoryAdminComponent } from './components/scan-history-admin/scan-
 import { DashboardAdminComponent } from './components/dashboard-admin/dashboard-admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ScanComponent } from './components/scan/scan.component';
+import { ProblemSubmissionComponent } from './components/problem-submission/problem-submission.component';
+import { AlimentateurComponent } from './components/alimentateur/alimentateur.component';
+import { WagonDashboardComponent } from './components/wagon-dashboard/wagon-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { ScanComponent } from './components/scan/scan.component';
     ScanHistoryAdminComponent,
     DashboardAdminComponent,
     ScanComponent,
+    ProblemSubmissionComponent,
+    AlimentateurComponent,
+    WagonDashboardComponent,
 
   ],
   imports: [
